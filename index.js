@@ -19,7 +19,7 @@ app.post("/users", (req, res) => {
 });
 
 app.get("/users", (req, res) => {
-  res.send({ message: "esse são os usersss", users });
+  res.send({ message: "easdsasse são os usersss", users });
 });
 
 app.listen(3000, () => {
