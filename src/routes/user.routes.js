@@ -1,7 +1,21 @@
 import { Router } from "express";
 import userController from "../controller/user.controllers.js";
-const router = Router()
+import { validate } from "../middlewares/validation.middlewares.js";
+import { userSchema } from "../schema/user.schema.js";
 
-router.post('/users', userController)
+const router = Router();
 
-export default router
+router.post("/users", validate(userSchema), userController.createUserController);
+
+router.get("/users", userController.findUsers);
+
+router.get("/all_users", userController.findAllUsers);
+
+router.delete("/delete_user", userController.deleteUserById)
+
+// router.put("/delete_user", userController.deleteUserById)
+
+
+
+
+export default router;
