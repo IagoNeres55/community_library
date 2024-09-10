@@ -1,3 +1,4 @@
+import { el } from "date-fns/locale";
 import db from "../config/database.js";
 
 // const users = [
@@ -60,7 +61,7 @@ function createUserRepository(newUser) {
       VALUES(?, ?, ?, ?, ?)
       `,
       [username, email, password, avatar, createdAt],
-      (err) => {
+      function (err) {
         if (err) {
           rej(err);
         } else {
@@ -111,13 +112,33 @@ function findUserByIdRepository(id) {
   });
 }
 
+function findUserByIdRepositoryPassword(id) {
+  return new Promise((res, rej) => {
+    db.get(
+      `
+        SELECT id, username, email, password, avatar
+        FROM users
+        WHERE id = ?
+      `,
+      [id],
+      (err, row) => {
+        if (err) {
+          rej(err);
+        } else {
+          res(row);
+        }
+      }
+    );
+  });
+}
+
 function findAllUsersRepository() {
   return new Promise((res, rej) => {
     db.all(
       `
-      SELECT id, username, email, avatar
-      FROM users
+      SELECT id, username, email, avatar, createdAt FROM users
       `,
+      [],
       (err, rows) => {
         if (err) {
           rej(err);
@@ -152,10 +173,37 @@ function DeleteUserRepository(id) {
   });
 }
 
+function UpdateUserRepository(id, user) {
+  return new Promise((res, rej) => {
+    const { username, email, password, avatar } = user;
+    db.run(
+      `
+      UPDATE users SET
+      username = ?,
+      email = ?,
+      password = ?,
+      avatar = ?
+      WHERE id = ?
+
+    `,
+      [username, email, password, avatar, id],
+      (err) => {
+        if (err) {
+          rej(err);
+        } else {
+          res({ id, ...user });
+        }
+      }
+    );
+  });
+}
+
 export default {
   createUserRepository,
   findUserByEmailRepository,
   findUserByIdRepository,
   findAllUsersRepository,
   DeleteUserRepository,
+  UpdateUserRepository,
+  findUserByIdRepositoryPassword,
 };

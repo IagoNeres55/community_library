@@ -7,4 +7,14 @@ const userSchema = z.object({
   avatar: z.string().url("invalid URL").optional(),
 });
 
-export { userSchema };
+const updateUser = z.object({
+  username: z.string().min(3, "User name").optional(),
+  email: z.string().email("E-mail invalido").optional(),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .optional(),
+  avatar: z.string().url("invalid URL").optional(),
+});
+
+export { userSchema, updateUser };
