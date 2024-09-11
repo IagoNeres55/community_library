@@ -34,36 +34,53 @@ async function GetfindUserById(id) {
 }
 
 async function DeleteUserService(id) {
-  const user = await userRepository.DeleteUserRepository(id);
-  if (!user) {
-    throw new Error("Usuário não existe!");
-  }
-  return user;
+  const user = await userRepository.findUserByIdRepository(id);
+  if (!user) throw new Error("User Not Found");
+
+  const message = await userRepository.DeleteUserRepository(id);
+
+  return message;
 }
 
+// async function UpdateUserServices(newUser, userId) {
+//   const user = await userRepository.findUserByIdRepositoryPassword(userId);
+//   if (!user) {
+//     throw new Error("User Not Found");
+//   }
+
+//   if (newUser.password) {
+//     newUser.password = await bcrypt.hash(newUser.password, 10);
+//   }
+
+//   const editUser = {
+//     username: newUser.username ?? user.username,
+//     email: newUser.email ?? user.email,
+//     password: newUser.password ?? user.password,
+//     avatar: newUser.avatar ?? user.avatar,
+//   };
+
+//   const userUpdate = await userRepository.UpdateUserRepository(
+//     userId,
+//     editUser
+//   );
+//   return userUpdate;
+// }
+
 async function UpdateUserServices(newUser, userId) {
-  const user = await userRepository.findUserByIdRepositoryPassword(userId);
-  console.log(user);
-  if (!user) {
-    throw new Error("User Not Found");
-  }
+ 
 
   if (newUser.password) {
     newUser.password = await bcrypt.hash(newUser.password, 10);
   }
 
-  const editUser = {
-    username: newUser.username || user.username,
-    email: newUser.email || user.email,
-    password: newUser.password || user.password,
-    avatar: newUser.avatar || user.avatar,
+  const updatedUser = {
+    username: newUser.username,
+    email: newUser.email,
+    password: newUser.password,
+    avatar: newUser.avatar,
   };
 
-  const userUpdate = await userRepository.UpdateUserRepository(
-    userId,
-    editUser
-  );
-  return userUpdate;
+  return await userRepository.UpdateUser(userId, updatedUser);
 }
 
 export default {

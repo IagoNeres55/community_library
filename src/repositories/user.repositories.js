@@ -162,11 +162,7 @@ function DeleteUserRepository(id) {
         if (err) {
           rej(err);
         } else {
-          if (this.changes > 0) {
-            res({ message: "usuário deletado com sucesso." });
-          } else {
-            res({ message: "usuário não encontrado." });
-          }
+          res({ message: "usuário deletado com sucesso.", id });
         }
       }
     );
@@ -198,6 +194,40 @@ function UpdateUserRepository(id, user) {
   });
 }
 
+const UpdateUser = async (id, newUser) => {
+  const { setClause, values } = Object.entries({
+    username: newUser.username,
+    email: newUser.email,
+    password: newUser.password
+      ? await bcrypt.hash(newUser.password, 10)
+      : undefined,
+    avatar: newUser.avatar,
+  }).reduce(
+    (acc, [key, value]) => {
+      if (value !== undefined) {
+        acc.setClause.push(`${key} = ?`);
+        acc.values.push(value);
+      }
+      return acc;
+    },
+    { setClause: [], values: [] }
+  );
+
+  if (setClause.length === 0) {
+    throw new Error("Nenhuma modificação enviada!");
+  }
+
+  const query = `UPDATE users SET ${setClause.join(", ")} WHERE id = ?`;
+  values.push(id);
+
+  return new Promise((res, rej) => {
+    db.run(query, values, function (err) {
+      if (err) return rej(err);
+      res({ message: "Usuário alterado" });
+    });
+  });
+};
+
 export default {
   createUserRepository,
   findUserByEmailRepository,
@@ -206,4 +236,5 @@ export default {
   DeleteUserRepository,
   UpdateUserRepository,
   findUserByIdRepositoryPassword,
+  UpdateUser,
 };

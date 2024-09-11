@@ -1,3 +1,4 @@
+import { id } from "date-fns/locale";
 import { z } from "zod";
 
 const userSchema = z.object({
@@ -17,4 +18,8 @@ const updateUser = z.object({
   avatar: z.string().url("invalid URL").optional(),
 });
 
-export { userSchema, updateUser };
+const userIdSchema = z.object({
+  userId: z.number().int().positive("User ID must be a positive integer"),
+});
+
+export { userSchema, updateUser, userIdSchema};

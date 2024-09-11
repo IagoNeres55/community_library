@@ -1,4 +1,3 @@
-import { query } from "express";
 import userService from "../service/user.services.js";
 
 async function createUserController(req, res) {
@@ -33,10 +32,10 @@ async function findAllUsers(req, res) {
 }
 
 async function deleteUserById(req, res) {
-  const userId = req.query.id_user;
+  const userId = req.params.id;
   try {
-    await userService.DeleteUserService(userId);
-    res.status(200).send({ message: "usuário deletado com sucesso." });
+    const message = await userService.DeleteUserService(userId);
+    res.status(200).send(message);
   } catch (err) {
     return res.status(400).send(err.message);
   }
@@ -46,8 +45,8 @@ async function updateUserController(req, res) {
   const { id } = req.params;
   const newUser = req.body;
   try {
-    const user = await userService.UpdateUserServices(newUser, id);
-    res.send({ user });
+    const message = await userService.UpdateUserServices(newUser, id);
+    res.send(message);
   } catch (err) {
     return res.status(400).send(err.message);
   }
