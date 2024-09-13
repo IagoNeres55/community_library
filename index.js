@@ -1,8 +1,10 @@
 import express from "express";
-
+import "dotenv/config"
 import userRouters from "./src/routes/user.routes.js";
 const app = express();
 app.use(express.json());
+
+const port = process.env.PORT || 3000
 
 // app.use(express.json)
 
@@ -11,6 +13,6 @@ app.use(express.json());
 // Callback functions => Onde executamos o backend (lógica, regra de negócio)
 app.use(userRouters);
 
-app.listen(3000, () => {
-  console.log("server is running");
+app.listen(port, () => {
+  console.log(`server is running ${port}`);
 });

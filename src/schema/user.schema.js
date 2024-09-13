@@ -22,4 +22,9 @@ const userIdSchema = z.object({
   userId: z.number().int().positive("User ID must be a positive integer"),
 });
 
-export { userSchema, updateUser, userIdSchema};
+const userLogin = z.object({
+  email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+});
+
+export { userSchema, updateUser, userIdSchema,userLogin};
