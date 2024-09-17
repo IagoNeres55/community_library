@@ -1,4 +1,3 @@
-import { el } from "date-fns/locale";
 import db from "../config/database.js";
 
 // const users = [

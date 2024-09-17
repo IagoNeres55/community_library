@@ -44,6 +44,7 @@ async function findAllUsers(req, res) {
 
 async function deleteUserById(req, res) {
   const userId = req.params.id;
+
   try {
     const message = await userService.DeleteUserService(userId);
     res.status(200).send(message);

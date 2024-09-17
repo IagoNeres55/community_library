@@ -12,6 +12,7 @@ const validate = (schema) => (req, res, next) => {
 const validateUserId = (req, res, next) => {
   try {
     const userId = +req.params.id;
+    //  const userId = +req.params.id;
     userIdSchema.parse({ userId: userId });
     next();
   } catch (e) {

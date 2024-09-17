@@ -7,8 +7,7 @@ export function authMiddleware(req, res, next) {
   if (!tokenHeader) {
     return res.status(401).send({ message: "The token was not informed!" });
   }
-
-
+  
   // separa meu token em um array de acordo com o espaço 
   const partsToken = tokenHeader.split(" ");
   if (partsToken.length !== 2) {
@@ -25,7 +24,7 @@ export function authMiddleware(req, res, next) {
   // verificação jwt, passando o token a minha key e uma função async
   jwt.verify(token, process.env.SECRET_JWT, async (err, decoded) => {
     if (err) {
-      return res.status(401).send({ message: "Invalid Token!" });
+      return res.status(401).send({ message: "Invalid Token!", error: err.message });
     }
 
     const user = await userServices.GetfindUserById(decoded.id);
