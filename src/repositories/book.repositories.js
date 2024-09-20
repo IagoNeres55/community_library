@@ -41,4 +41,83 @@ function findAllBooksRepository() {
   });
 }
 
-export default { createBookRepository, findAllBooksRepository };
+function findBookByIdRepository(bookId) {
+  return new Promise((res, rej) => {
+    db.all(`SELECT * FROM books WHERE id = ?`, [bookId], (err, row) => {
+      if (err) {
+        rej(err);
+      } else {
+        res(row);
+      }
+    });
+  });
+}
+
+async function updateBookRepository(bookId, newBook) {
+  const { setClause, values } = Object.entries({
+    title: newBook.title,
+    author: newBook.author,
+  }).reduce(
+    (acc, [key, value]) => {
+      if (value !== undefined) {
+        acc.setClause.push(`${key} = ?`);
+        acc.values.push(value);
+      }
+      return acc;
+    },
+    { setClause: [], values: [] }
+  );
+
+  if (setClause.length === 0) {
+    throw new Error("Nenhuma modificação enviada!");
+  }
+
+  const query = `UPDATE books SET ${setClause.join(", ")} WHERE id = ?`;
+  values.push(bookId);
+
+  console.log(query, values);
+
+  return new Promise((res, rej) => {
+    db.run(query, values, function (err) {
+      if (err) return rej(err);
+      res({ message: "Sucess" });
+    });
+  });
+}
+
+function deleteBookByIdRepository(bookId) {
+  return new Promise((res, rej) => {
+    db.run(`DELETE FROM books WHERE id = ?`, [bookId], (err) => {
+      if (err) {
+        rej(err);
+      } else {
+        res({ message: "Livro deletado com sucesso" });
+      }
+    });
+  });
+}
+
+function searchBookRepository(search) {
+  return new Promise((res, rej) => {
+    db.all(
+      `SELECT * FROM books WHERE title LIKE ? OR author LIKE ?`,
+      [`%${search}%`, `%${search}%`],
+      (err, rows) => {
+        if (err) {
+          rej(err);
+        } else {
+          res(rows);
+        }
+      }
+    );
+  });
+}
+
+export default {
+  createBookRepository,
+  findAllBooksRepository,
+  updateBookRepository,
+  findBookByIdRepository,
+  deleteBookByIdRepository,
+  searchBookRepository
+};

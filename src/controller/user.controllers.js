@@ -16,7 +16,7 @@ async function loginUserController(req, res) {
   const { email, password } = req.body;
   try {
     const token = await authService.LoginService(email, password);
-    res.status(200).send({ token });
+    res.status(200).send(token);
   } catch (err) {
     res.status(400).send(err.message);
   }

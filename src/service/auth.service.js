@@ -12,7 +12,16 @@ async function LoginService(email, password) {
   if (!user) throw new Error("invalid user");
   const isPassowordvalid = await bcrypt.compare(password, user.password);
   if (!isPassowordvalid) throw new Error("invalid user");
-  return generateJWT(user.id);
+
+  const userInfo = {
+    userId: user.id,
+    username: user.username,
+    email: user.email,
+    token: generateJWT(user.id)
+  
+
+  }
+  return userInfo
 }
 
 export default { generateJWT, LoginService };
