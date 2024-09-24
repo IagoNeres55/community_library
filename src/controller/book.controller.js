@@ -6,9 +6,9 @@ async function createBookController(req, res) {
 
   try {
     const createBook = await bookServices.createBookService(newBook, userId);
-    res.status(201).send(createBook);
+    return res.status(201).send(createBook);
   } catch (err) {
-    res.status(400).send(err.message);
+    return res.status(400).send(err.message);
   }
 }
 
