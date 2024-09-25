@@ -18,9 +18,9 @@ async function LoginService(email, password) {
     username: user.username,
     email: user.email,
     token: generateJWT(user.id)
-  
 
   }
+
   return userInfo
 }
 

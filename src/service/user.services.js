@@ -71,7 +71,6 @@ async function DeleteUserService(id) {
 
 async function UpdateUserServices(newUser, userId) {
  
-
   if (newUser.password) {
     newUser.password = await bcrypt.hash(newUser.password, 10);
   }

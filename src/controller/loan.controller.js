@@ -6,8 +6,8 @@ async function createLoanController(req, res) {
 
   try {
     const createLoan = await loanService.createLoanService(
-      bookId,
       userId,
+      bookId,
       dueDate
     );
     return res.status(201).send(createLoan);
@@ -21,8 +21,36 @@ async function findAllLoanController(req, res) {
     const loans = await loanService.findAllLoanService();
     return res.send(loans);
   } catch (err) {
-    return res.status(404).send(err.massage);
+    return res.status(404).send(err.message);
   }
 }
 
-export default { createLoanController, findAllLoanController };
+async function findLoanByIdController(req, res) {
+  const loanId = req.params.id;
+
+  try {
+    const loan = await loanService.findLoanByIdService(loanId);
+    return res.send(loan);
+  } catch (err) {
+    return res.status(404).send(err.message);
+  }
+}
+
+async function deleteLoanController(req, res) {
+  const loanId = req.params.id;
+  const userId = req.userId;
+
+  try {
+    const loan = await loanService.deleteLoanService(loanId, userId);
+    return res.send(loan);
+  } catch (err) {
+    return res.status(404).send(err.message);
+  }
+}
+
+export default {
+  createLoanController,
+  findAllLoanController,
+  findLoanByIdController,
+  deleteLoanController,
+};

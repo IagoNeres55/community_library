@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const loanSchema = z.object({
-  bookId: z.number().int().positive("Book ID must be a positive interger"),
+  bookId: z.number().int().positive("loan ID must be a positive interger"),
   dueDate: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)

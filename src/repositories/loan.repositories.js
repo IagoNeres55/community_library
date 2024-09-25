@@ -39,4 +39,33 @@ function findAllLoanRepository() {
   });
 }
 
-export default { createLoanRepository, findAllLoanRepository };
+function findLoanByIdRepository(loanId) {
+  return new Promise((res, rej) => {
+    db.get(`SELECT * FROM loans WHERE id = ?`, [loanId], (err, row) => {
+      if (err) {
+        rej(err);
+      } else {
+        res(row);
+      }
+    });
+  });
+}
+
+function deleteLoanRepository(loanId) {
+  return new Promise((res, rej) => {
+    db.run(`DELETE FROM loans WHERE id = ?`, [loanId], (err) => {
+      if (err) {
+        rej(err);
+      } else {
+        res({ message: `Emprestimo ${loanId} deletado!` });
+      }
+    });
+  });
+}
+
+export default {
+  createLoanRepository,
+  findAllLoanRepository,
+  findLoanByIdRepository,
+  deleteLoanRepository,
+};

@@ -15,4 +15,25 @@ async function findAllLoanService() {
   return loans;
 }
 
-export default { createLoanService, findAllLoanService };
+async function findLoanByIdService(loanId) {
+  const loan = await loanRepositories.findLoanByIdRepository(loanId);
+  if (!loan) throw new Error("Loan not of exists");
+  return loan;
+}
+
+async function deleteLoanService(loanId, userId) {
+  const loan = await loanRepositories.findLoanByIdRepository(loanId);
+  if (!loan) throw new Error("Loan not found");
+
+  if (loan.userId !== userId) throw new Error("Unauthorized");
+
+  const deleteLoan = await loanRepositories.deleteLoanRepository(loanId);
+  return deleteLoan;
+}
+
+export default {
+  createLoanService,
+  findAllLoanService,
+  findLoanByIdService,
+  deleteLoanService,
+};

@@ -1,6 +1,9 @@
 import { Router } from "express";
 import loanController from "../controller/loan.controller.js";
-import { validate } from "../middlewares/validation.middlewares.js";
+import {
+  validate,
+  validadeLoanId,
+} from "../middlewares/validation.middlewares.js";
 import { loanSchema, loadIdSchema } from "../schema/loan.schema.js";
 
 const router = Router();
@@ -10,20 +13,16 @@ router.post(
   validate(loanSchema),
   loanController.createLoanController
 );
-router.get(
-  "/loans",
-  loanController.findAllLoanController
-);
+router.get("/loans", loanController.findAllLoanController);
 
 // buscar por id
-// router.get(
-//   "/loans",
-//   loanController.findAllLoanController
-// );
+router.get("/loans/:id", validadeLoanId, loanController.findLoanByIdController);
 
 // criar o delete
-// router.delete(
-//   "/loans",
-//   loanController.findAllLoanController
-// );
+router.delete(
+  "/loans/:id",
+  validadeLoanId,
+  loanController.deleteLoanController
+);
+
 export default router;

@@ -1,4 +1,3 @@
-import { id } from "date-fns/locale";
 import { z } from "zod";
 
 const userSchema = z.object({
@@ -22,9 +21,13 @@ const userIdSchema = z.object({
   userId: z.number().int().positive("User ID must be a positive integer"),
 });
 
+const loanIdSchema = z.object({
+  loanId: z.number().int().positive("loan ID must be a positive integer"),
+});
+
 const userLogin = z.object({
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters long"),
 });
 
-export { userSchema, updateUser, userIdSchema,userLogin};
+export { userSchema, updateUser, userIdSchema, userLogin, loanIdSchema };
