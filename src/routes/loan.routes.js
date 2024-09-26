@@ -4,7 +4,7 @@ import {
   validate,
   validadeLoanId,
 } from "../middlewares/validation.middlewares.js";
-import { loanSchema, loadIdSchema } from "../schema/loan.schema.js";
+import { loanSchema } from "../schema/loan.schema.js";
 
 const router = Router();
 

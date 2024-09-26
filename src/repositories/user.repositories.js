@@ -46,8 +46,8 @@ db.run(
   username TEXT UNIQUE NOT NULL,
   email TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
-  avatar TEXT
-  
+  avatar TEXT,
+  createdAt DATE
   )`
 );
 

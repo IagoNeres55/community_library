@@ -5,7 +5,7 @@ db.run(`
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   userId INTEGER,
   bookId INTEGER,
-  dueDate DATE,
+  duedate DATE,
   FOREIGN KEY (userId) REFERENCES users(id),
   FOREIGN KEY (bookId) REFERENCES books(id)
   )
@@ -29,13 +29,20 @@ function createLoanRepository(userId, bookId, dueDate) {
 
 function findAllLoanRepository() {
   return new Promise((res, rej) => {
-    db.all(`SELECT * FROM loans`, [], (err, rows) => {
-      if (err) {
-        rej(err);
-      } else {
-        res(rows);
+    db.all(
+      `SELECT loans.id, loans.duedate, users.email, users.username, books.title
+      FROM loans 
+      JOIN users ON loans.userid = users.id 
+      JOIN books ON loans.bookId = books.id`,
+      [],
+      (err, rows) => {
+        if (err) {
+          rej(err);
+        } else {
+          res(rows);
+        }
       }
-    });
+    );
   });
 }
 
@@ -51,13 +58,33 @@ function findLoanByIdRepository(loanId) {
   });
 }
 
+//   function findAllLoanRepository() {
+//     return new Promise((res, rej) => {
+//       db.all(
+//         `SELECT loans.id, loans.dueDate, users.email, users.username, books.title FROM loans
+//         JOIN users ON loans.userId = users.id
+//         JOIN books ON loans.bookId = books.id
+//         `,
+//         [],
+//         (err, rows) => {
+//           if (err) {
+//             rej(err);
+//           } else {
+//             res(rows);
+//           }
+//         }
+//       );
+//     });
+//   }
+// }
+
 function deleteLoanRepository(loanId) {
   return new Promise((res, rej) => {
     db.run(`DELETE FROM loans WHERE id = ?`, [loanId], (err) => {
       if (err) {
         rej(err);
       } else {
-        res({ message: `Emprestimo ${loanId} deletado!` });
+        res({ message: `Usuário ${loanId} deletado!` });
       }
     });
   });

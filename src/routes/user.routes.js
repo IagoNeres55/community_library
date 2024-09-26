@@ -21,12 +21,8 @@ router.post("/login", validate(userLogin), userController.loginUserController);
 
 router.use(authMiddleware); //valida as rotas
 router.get("/users/:id", validateUserId, userController.findUsers);
-router.get("/all_users", userController.findAllUsers);
-router.delete(
-  "/delete_user/:id",
-  validateUserId,
-  userController.deleteUserById
-);
+router.get("/users", userController.findAllUsers);
+router.delete("/users/:id", validateUserId, userController.deleteUserById);
 
 router.put(
   "/users/:id",

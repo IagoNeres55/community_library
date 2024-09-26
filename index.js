@@ -1,10 +1,8 @@
 import express from "express";
 import "dotenv/config";
-import userRouters from "./src/routes/user.routes.js";
-import bookRouters from "./src/routes/book.routes.js";
-import loanRouters from "./src/routes/loan.routes.js";
+import "./src/service/cron.service.js"
+import { routers } from "./src/routes/index.js";
 const app = express();
-app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
@@ -13,9 +11,8 @@ const port = process.env.PORT || 3000;
 // METHOD => GET, POST, PUT/PATCH, DELETE
 // NAME => nomes sempre no plural
 // Callback functions => Onde executamos o backend (lógica, regra de negócio)
-app.use(userRouters);
-app.use(bookRouters);
-app.use(loanRouters);
+app.use(express.json());
+app.use(routers);
 
 app.listen(port, () => {
   console.log(`server is running ${port}`);
